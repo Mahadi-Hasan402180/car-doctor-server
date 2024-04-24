@@ -1,11 +1,13 @@
 const express = require('express');
 const cors = require('cors');
+
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 const app = express();
 const port = process.env.PORT || 5000;
 
 //middleware
+
 app.use(cors());
 app.use(express.json());
 
@@ -30,8 +32,11 @@ async function run() {
     const serviceCollection = client.db('carDoctor').collection('services');
     const bookingCollection = client.db('carDoctor').collection('bookings');
 
+    //auth related api
+    
 
-    //services
+     
+    //services related api
     app.get('/services',async(req,res)=>{
       const curser = serviceCollection.find();
       const result = await curser.toArray();
@@ -53,8 +58,8 @@ async function run() {
       res.send(result);
     })
 
+    
     //bookings
-
     app.get('/bookings',async(req,res)=>{
       console.log(req.query.email);
       let query = {};
