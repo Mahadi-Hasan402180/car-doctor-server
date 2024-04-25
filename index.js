@@ -1,6 +1,5 @@
 const express = require('express');
-const cors = require('cors');
-
+const cors = require("cors");
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 const app = express();
@@ -11,7 +10,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-console.log(process.env.DB_PASS);
+//console.log(process.env.DB_PASS);
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.dwgzdef.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -31,8 +30,17 @@ async function run() {
 
     const serviceCollection = client.db('carDoctor').collection('services');
     const bookingCollection = client.db('carDoctor').collection('bookings');
+    const appointmentCollection = client.db('carDoctor').collection('appointment');
 
-    //auth related api
+
+
+    //appointment related api
+    app.post('/appointment',async(req,res)=>{
+      const user = req.body;
+      console.log('new appointment user',user);
+      const result = await appointmentCollection.insertOne(user);
+      res.send(result);
+    });
     
 
      
