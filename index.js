@@ -35,6 +35,51 @@ async function run() {
 
 
     //appointment related api
+
+    app.get('/appointment',async(req,res)=>{
+      const curser = appointmentCollection.find();
+      const result = await curser.toArray();
+      res.send(result);
+
+    })
+
+    app.get('/appointments/:id',async(req,res)=>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await appointmentCollection.findOne(query);
+      res.send(result);
+    })
+
+    app.put('/appointments/:id',async(req,res)=>{
+      const id = req.params.id;
+      const updateAppointment = req.body;
+      console.log(id , updateAppointment);
+      const filter = {_id: new ObjectId(id)}
+      const options = {upsert: true}
+      const updatedAppointment = {
+        $set:{
+          name: updateAppointment.name,
+          email: updateAppointment.email,
+          date: updateAppointment.date,
+          phone: updateAppointment.phone,
+          service: updateAppointment.service,
+          phone: updateAppointment.phone,
+        }
+      }
+      const result = await appointmentCollection.updateOne(filter,updatedAppointment, options)
+      res.send(result)
+      
+    })
+
+    app.delete('/appointment/:id',async(req,res)=>{
+      const id = req.params.id;
+      const query = {_id:new ObjectId(id)}
+      const result = await appointmentCollection.deleteOne(query);
+      res.send(result);
+    })
+
+
+
     app.post('/appointment',async(req,res)=>{
       const user = req.body;
       console.log('new appointment user',user);
